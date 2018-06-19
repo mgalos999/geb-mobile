@@ -59,7 +59,6 @@ class AndroidUIAutomatorNonEmptyNavigator extends AbstractMobileNonEmptyNavigato
             //This works only on WEB_VIEW
             return navigatorFor(driver.findElementsByCssSelector(selectorString) )
         } else {
-            selectorString = selectorString.replaceAll("'", '\"')
             log.debug "Using UIAutomator with: $selectorString"
             navigatorFor(driver.findElementsByAndroidUIAutomator(selectorString))
         }
