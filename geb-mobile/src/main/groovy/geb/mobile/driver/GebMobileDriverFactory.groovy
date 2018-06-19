@@ -85,23 +85,52 @@ class GebMobileDriverFactory {
                     return driver
                 }
 
-                log.info("Create AppiumDriver ")
-                try {
-                    driver = new AndroidDriver(getURL("http://localhost:4723/wd/hub"), capa)
-                    driver.setFileDetector(new LocalFileDetector())
-                    sleep(1000)
-                    log.info("Driver created: $driver.capabilities")
-                    return driver
-                } catch (e) {
-                    //
-                    log.error("eXC: $e.message", e)
-                    if (e.message =~ /Android devices must be of API level 17 or higher/) {
-                        capa.setCapability("automationName", "selendroid")
-                        try {
-                            driver = new SelendroidDriver(getURL("http://localhost:4723/wd/hub"), capa)
-                            driver.setFileDetector(new LocalFileDetector())
-                        } catch (ex) {
-                            log.error("Error:", ex)
+                if(!System.properties.browserstack) {
+                    log.info("Create AppiumDriver ")
+                    try {
+                        driver = new AndroidDriver(getURL("http://localhost:4723/wd/hub"), capa)
+                        driver.setFileDetector(new LocalFileDetector())
+                        sleep(1000)
+                        log.info("Driver created: $driver.capabilities")
+                        return driver
+                    } catch (e) {
+                        //
+                        log.error("eXC: $e.message", e)
+                        if (e.message =~ /Android devices must be of API level 17 or higher/) {
+                            capa.setCapability("automationName", "selendroid")
+                            try {
+                                driver = new SelendroidDriver(getURL("http://localhost:4723/wd/hub"), capa)
+                                driver.setFileDetector(new LocalFileDetector())
+                            } catch (ex) {
+                                log.error("Error:", ex)
+                            }
+                        }
+                    }
+                } else {
+                    log.info("Connecting to Browserstack")
+                    try {
+                        def browserstackUser = System.getenv("GEB_BROWSERSTACK_USERNAME") ?: ""
+                        def browserstackKey = System.getenv("GEB_BROWSERSTACK_ACCESSKEY") ?: ""
+                        def url = "https://" + browserstackUser + ":" + browserstackKey + "@hub.browserstack.com/wd/hub"
+                        driver = new AndroidDriver(getURL(url), capa)
+                        driver.setFileDetector(new LocalFileDetector())
+                        sleep(1000)
+                        log.info("Driver created: $driver.capabilities")
+                        return driver
+                    } catch (e) {
+                        //
+                        log.error("eXC: $e.message", e)
+                        if (e.message =~ /Android devices must be of API level 17 or higher/) {
+                            capa.setCapability("automationName", "selendroid")
+                            def browserstackUser = System.getenv("GEB_BROWSERSTACK_USERNAME") ?: ""
+                            def browserstackKey = System.getenv("GEB_BROWSERSTACK_ACCESSKEY") ?: ""
+                            def url = "https://" + browserstackUser + ":" + browserstackKey + "@hub.browserstack.com/wd/hub"
+                            try {
+                                driver = new SelendroidDriver(getURL(url), capa)
+                                driver.setFileDetector(new LocalFileDetector())
+                            } catch (ex) {
+                                log.error("Error:", ex)
+                            }
                         }
                     }
                 }

@@ -114,9 +114,9 @@ class AndroidHelper {
 
         if (driver instanceof AppiumDriver) {
             def dim = driver.manage().window().size
-            int startX = dim.width - 5
+            int startX = dim.width - 50
             int startY = dim.height / 2
-            int endX = 5
+            int endX = 50
             int endY = startY
             try {
                 driver.swipe(startX, startY, endX, endY, 200)
@@ -138,9 +138,9 @@ class AndroidHelper {
         if (driver instanceof AppiumDriver) {
 
             def dim = driver.manage().window().size
-            int startX = 5
+            int startX = 50
             int startY = dim.height / 2
-            int endX = dim.width - 5
+            int endX = dim.width - 50
             int endY = startY
             try {
                 driver.swipe(startX, startY, endX, endY, 200)
