@@ -109,8 +109,8 @@ class GebMobileDriverFactory {
                 } else {
                     log.info("Connecting to Browserstack")
                     try {
-                        def browserstackUser = System.getenv("GEB_BROWSERSTACK_USERNAME") ?: ""
-                        def browserstackKey = System.getenv("GEB_BROWSERSTACK_ACCESSKEY") ?: ""
+                        def browserstackUser = System.getenv("BROWSERSTACK_USER") ?: ""
+                        def browserstackKey = System.getenv("BROWSERSTACK_ACCESSKEY") ?: ""
                         def url = "https://" + browserstackUser + ":" + browserstackKey + "@hub.browserstack.com/wd/hub"
                         driver = new AndroidDriver(getURL(url), capa)
                         driver.setFileDetector(new LocalFileDetector())
@@ -122,8 +122,8 @@ class GebMobileDriverFactory {
                         log.error("eXC: $e.message", e)
                         if (e.message =~ /Android devices must be of API level 17 or higher/) {
                             capa.setCapability("automationName", "selendroid")
-                            def browserstackUser = System.getenv("GEB_BROWSERSTACK_USERNAME") ?: ""
-                            def browserstackKey = System.getenv("GEB_BROWSERSTACK_ACCESSKEY") ?: ""
+                            def browserstackUser = System.getenv("BROWSERSTACK_USER") ?: ""
+                            def browserstackKey = System.getenv("BROWSERSTACK_ACCESSKEY") ?: ""
                             def url = "https://" + browserstackUser + ":" + browserstackKey + "@hub.browserstack.com/wd/hub"
                             try {
                                 driver = new SelendroidDriver(getURL(url), capa)
